@@ -1,246 +1,791 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Graduation Celebration</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🩺 Medical Quiz Challenge - Are You Ready, Doc?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      text-align: center;
+    :root {
+      --primary: #d946ef;
+      --secondary: #a855f7;
+      --accent: #ec4899;
+      --success: #10b981;
+      --error: #ef4444;
+      --bg: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 50%, #fae8ff 100%);
+      --card-shadow: 0 20px 40px rgba(217, 70, 239, 0.15);
+      --text-dark: #1f2937;
+      --gold: #fbbf24;
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      background:
-        linear-gradient(rgba(255,230,240,0.7), rgba(255,230,240,0.7)),
-        url('https://www.toptal.com/designers/subtlepatterns/uploads/party.png') repeat;
+      box-sizing: border-box;
     }
 
-    header {
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
       padding: 20px;
-      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-      color: #fff;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      animation: fadeIn 1s ease-out;
-    }
-    header h1 {
-      margin: 0;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 60vh;
-    }
-
-    .balloon {
-      width: 20vw;
-      height: 30vw;
-      background: radial-gradient(circle at top left, #ff7e5f, #feb47b);
-      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      color: var(--text-dark);
       position: relative;
-      transition: transform 0.1s ease;
-    }
-    .balloon::after {
-      content: '';
-      position: absolute;
-      bottom: -5vw;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 2vw solid transparent;
-      border-right: 2vw solid transparent;
-      border-top: 5vw solid #feb47b;
+      overflow-x: hidden;
     }
 
-    #message {
-      display: none;
-      font-size: 24px;
-      margin-top: 20px;
-      opacity: 0;
-      transition: opacity 1s ease;
-      background: #fff;
-      padding: 20px;
-      border: 2px solid #4CAF50;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    #message button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background: linear-gradient(135deg, #4CAF50, #81C784);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      margin-top: 10px;
-      filter: brightness(1);
-      transition: filter 0.2s;
-    }
-    #message button:hover { filter: brightness(1.1); }
-
-    button#start {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background: linear-gradient(to right, #6a11cb, #2575fc);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      animation: pulse 2s infinite;
-      transition: filter 0.2s;
-    }
-    button#start:active { transform: scale(0.95); }
-    button#start:hover { filter: brightness(1.1); }
-
-    @keyframes pulse {
-      0%,100% { transform: scale(1); }
-      50%     { transform: scale(1.05); }
-    }
-
-    footer {
-      padding: 20px;
-      background: linear-gradient(135deg, #c3e0e5, #a3d5d3);
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
-    }
-
-    .confetti {
+    /* Floating hearts animation */
+    .floating-hearts {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 1000;
+      z-index: -1;
     }
-    .confetti-piece {
+
+    .heart {
       position: absolute;
-      width: 10px;
-      height: 10px;
-      opacity: 0.8;
-      animation: confetti-fall 5s linear infinite;
+      font-size: 20px;
+      color: rgba(236, 72, 153, 0.3);
+      animation: float 6s ease-in-out infinite;
     }
-    @keyframes confetti-fall {
-      0% { transform: translateY(0) rotate(0deg); }
-      100% { transform: translateY(100vh) rotate(360deg); }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      background: white;
+      padding: 2rem;
+      border-radius: 2rem;
+      box-shadow: var(--card-shadow);
+      border: 3px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .quiz-card {
+      background: white;
+      border-radius: 2rem;
+      box-shadow: var(--card-shadow);
+      padding: 2.5rem;
+      margin-bottom: 1.5rem;
+      border: 3px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .quiz-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 2rem;
+      padding: 3px;
+      background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: subtract;
+      z-index: -1;
+    }
+
+    .question-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(217, 70, 239, 0.3);
+    }
+
+    .question-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      color: var(--text-dark);
+    }
+
+    .options {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .option {
+      background: linear-gradient(135deg, #fdf4ff, #fae8ff);
+      border: 2px solid #e9d5ff;
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      position: relative;
+      transform: translateX(0);
+    }
+
+    .option:hover {
+      background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+      border-color: var(--primary);
+      transform: translateX(8px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(217, 70, 239, 0.2);
+    }
+
+    .option.selected {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-color: var(--primary);
+      color: white;
+      font-weight: 600;
+      transform: translateX(8px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(217, 70, 239, 0.4);
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(236, 72, 153, 0.4);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .feedback {
+      margin-top: 2rem;
+      padding: 2rem;
+      border-radius: 2rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .feedback.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feedback.correct {
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      border: 3px solid var(--success);
+      color: #065f46;
+    }
+
+    .feedback.incorrect {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      border: 3px solid var(--error);
+      color: #991b1b;
+    }
+
+    .feedback-emoji {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .next-btn {
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    }
+
+    .retry-btn {
+      background: linear-gradient(135deg, var(--error), #dc2626);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+    }
+
+    .next-btn:hover, .retry-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(16, 185, 129, 0.4);
+    }
+
+    .retry-btn:hover {
+      box-shadow: 0 12px 35px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Certificate Styles */
+    .certificate-container {
+      display: none;
+      background: white;
+      border-radius: 2rem;
+      padding: 3rem;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+      border: 5px solid var(--gold);
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%);
+    }
+
+    .certificate-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(251, 191, 36, 0.1), transparent);
+      animation: sparkle 3s linear infinite;
+    }
+
+    @keyframes sparkle {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .certificate-header {
+      border-bottom: 3px solid var(--gold);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .certificate-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .certificate-subtitle {
+      font-size: 1.2rem;
+      color: #92400e;
+      font-weight: 600;
+    }
+
+    .certificate-body {
+      margin-bottom: 2rem;
+    }
+
+    .certificate-recipient {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin: 1.5rem 0;
+      text-decoration: underline;
+      text-decoration-color: var(--gold);
+    }
+
+    .certificate-text {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: #374151;
+      margin-bottom: 2rem;
+    }
+
+    .certificate-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 2px solid var(--gold);
+      padding-top: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .certificate-date, .certificate-signature {
+      text-align: center;
+    }
+
+    .certificate-date h4, .certificate-signature h4 {
+      font-size: 1rem;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
+    }
+
+    .certificate-date p, .certificate-signature p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .nurse-emoji {
+      font-size: 4rem;
+      margin: 1rem 0;
+    }
+
+    .certificate-border {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border: 2px dashed var(--gold);
+      border-radius: 1.5rem;
+      pointer-events: none;
+    }
+
+    /* Hidden class */
+    .hidden {
+      display: none;
+    }
+
+    /* Pulse animation for waiting */
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .quiz-card {
+        padding: 2rem;
+      }
+      
+      .question-text {
+        font-size: 1.1rem;
+      }
+
+      .certificate-title {
+        font-size: 2rem;
+      }
+
+      .certificate-recipient {
+        font-size: 1.5rem;
+      }
+
+      .certificate-footer {
+        flex-direction: column;
+        gap: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🎓 Congratulations, Graduate!</h1>
-  </header>
-
-  <main>
-    <p>Blow into your microphone to inflate the balloon!<br>Make sure to allow mic access.</p>
-    <button id="start">Start</button>
-    <div class="balloon"></div>
-  </main>
-
-  <div id="message">
-    <p>🎉 Congratulations on your graduation!</p>
-    <button onclick="window.open('https://www.google.com/maps','_blank')">
-      View Celebration Location
-    </button>
+  <div class="floating-hearts">
+    <div class="heart" style="left: 10%; animation-delay: 0s;">💜</div>
+    <div class="heart" style="left: 20%; animation-delay: 1s;">🩺</div>
+    <div class="heart" style="left: 30%; animation-delay: 2s;">💖</div>
+    <div class="heart" style="left: 40%; animation-delay: 0.5s;">🏥</div>
+    <div class="heart" style="left: 50%; animation-delay: 1.5s;">💜</div>
+    <div class="heart" style="left: 60%; animation-delay: 2.5s;">🩺</div>
+    <div class="heart" style="left: 70%; animation-delay: 0.8s;">💖</div>
+    <div class="heart" style="left: 80%; animation-delay: 1.8s;">🏥</div>
+    <div class="heart" style="left: 90%; animation-delay: 2.2s;">💜</div>
   </div>
 
-  <footer>
-    <!-- left blank -->
-  </footer>
+  <div class="container">
+    <div class="header">
+      <h1>اختبار لتحديد اذا نعطيك شهادة التخرج</h1>
+      <p>جاوبي كل الاسئلة عشان تاخذي الشهادة!</p>
+    </div>
 
-  <div class="confetti" id="confetti"></div>
-  <audio id="blowSound" src="https://www.soundjay.com/nature/sounds/wind-blowing-03.mp3" preload="auto" loop></audio>
-  <audio id="popSound"  src="https://www.soundjay.com/button/beep-07.wav"      preload="auto"></audio>
+    <div class="quiz-card" id="questionCard">
+      <div class="question-badge" id="questionBadge">Question 1 of 5</div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>
+        <span>Submit Answer 💫</span>
+      </button>
+      
+      <div class="feedback" id="feedback">
+        <span class="feedback-emoji" id="feedbackEmoji"></span>
+        <div id="feedbackText"></div>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">
+          Next Question! 🚀
+        </button>
+        <button class="retry-btn" id="retryBtn" onclick="retryQuestion()">
+          Try Again! 💪
+        </button>
+      </div>
+    </div>
+
+    <!-- Graduation Certificate -->
+    <div class="certificate-container" id="certificateContainer">
+      <div class="certificate-border"></div>
+      
+      <div class="certificate-header">
+        <div class="certificate-title">🎓 CERTIFICATE OF GRADUATION 🎓</div>
+        <div class="certificate-subtitle">NURSING EXCELLENCE PROGRAM</div>
+      </div>
+
+      <div class="certificate-body">
+        <div class="nurse-emoji">👩‍⚕️</div>
+        
+        <div class="certificate-text">
+          This is to certify that
+        </div>
+        
+        <div class="certificate-recipient" id="recipientName">FUTURE NURSE</div>
+        
+        <div class="certificate-text">
+          has successfully completed the Nursing Bachelor<br><br>
+          <strong>You deserve to be a nurse!</strong><br>
+          Congratulations on your graduation! 🎉
+        </div>
+      </div>
+
+      <div class="certificate-footer">
+        <div class="certificate-date">
+          <h4>Date of Completion</h4>
+          <p id="completionDate"></p>
+        </div>
+        <div class="certificate-signature">
+          <h4>Authorized by</h4>
+          <p>عائلتك الثانية</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
-    const startBtn   = document.getElementById('start');
-    const balloon    = document.querySelector('.balloon');
-    const msgBox     = document.getElementById('message');
-    const confetti   = document.getElementById('confetti');
-    const blowSound  = document.getElementById('blowSound');
-    const popSound   = document.getElementById('popSound');
+    const questions = [
+      {
+        id: 1,
+        text: "What is the normal adult respiratory rate?",
+        options: [
+          "A. 8–12 breaths/min",
+          "B. 12–20 breaths/min",
+          "C. 20–28 breaths/min",
+          "D. 28–36 breaths/min"
+        ],
+        correct: 1,
+        correctFeedback: "🎉صح عليييك",
+        wrongFeedback: "معقوله؟ فكري مره ثانية"
+      },
+      {
+        id: 2,
+        text: "Which of the following is NOT a vital sign?",
+        options: [
+          "A. Temperature",
+          "B. Blood pressure",
+          "C. Pain",
+          "D. Height"
+        ],
+        correct: 3,
+        correctFeedback: "ياعيني عالذكاء",
+        wrongFeedback: "معقوله؟ فكري مره ثانية"
+      },
+      {
+        id: 3,
+        text: "A patient complains of dizziness and shakiness. You suspect hypoglycemia. What should you do first?",
+        options: [
+          "A. Call the doctor immediately",
+          "B. Give insulin",
+          "C. Check the patient's blood glucose",
+          "D. Start an IV line"
+        ],
+        correct: 2,
+        correctFeedback: "حلو كذا اتأكدنا انك ممرضه",
+        wrongFeedback: "معقوله؟ فكري مره ثانية"
+      },
+      {
+        id: 4,
+        text: "Which of the following is a normal adult blood pressure?",
+        options: [
+          "A. 160/100 mmHg",
+          "B. 90/60 mmHg",
+          "C. 120/80 mmHg",
+          "D. 70/40 mmHg"
+        ],
+        correct: 2,
+        correctFeedback: "باقي شويا على الشهادة!!",
+        wrongFeedback: "معقوله؟ فكري مره ثانية"
+      },
+      {
+        id: 5,
+        text: "What equipment is used to listen to heart and lung sounds?",
+        options: [
+          "A. Sphygmomanometer",
+          "B. Otoscope",
+          "C. Thermometer",
+          "D. Stethoscope"
+        ],
+        correct: 3,
+        correctFeedback: "الله عليك",
+        wrongFeedback: "معقوله؟ فكري مره ثانية"
+      }
+    ];
 
-    let scaleFactor = 1,
-        MAX_SCALE   = 2,
-        INCREMENT   = 0.01,
-        THRESHOLD   = 0.02,
-        running     = false,
-        micStream;
+    let currentQuestionIndex = 0;
+    let selectedAnswer = null;
+    let totalQuestions = questions.length;
 
-    startBtn.addEventListener('click', () => {
-      startBtn.disabled = true;
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-          micStream = stream;
-          const audioCtx = new AudioContext();
-          const source   = audioCtx.createMediaStreamSource(stream);
-          const analyser = audioCtx.createAnalyser();
-          analyser.fftSize = 2048;
-          source.connect(analyser);
-          running = true;
-          processAudio(analyser);
-        })
-        .catch(err => {
-          alert('Microphone error: ' + err.message);
-          startBtn.disabled = false;
-        });
-    });
+    function initQuiz() {
+      showQuestion(currentQuestionIndex);
+    }
 
-    function processAudio(analyser) {
-      if (!running) return;
-      const data = new Uint8Array(analyser.fftSize);
-      analyser.getByteTimeDomainData(data);
-      let sum = 0;
-      for (let v of data) sum += ((v - 128) / 128) ** 2;
-      const rms = Math.sqrt(sum / data.length);
+    function showQuestion(index) {
+      const question = questions[index];
+      
+      document.getElementById('questionBadge').textContent = `Question ${index + 1} of ${totalQuestions}`;
+      document.getElementById('questionText').textContent = question.text;
+      
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+      
+      question.options.forEach((option, optionIndex) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'option';
+        optionDiv.textContent = option;
+        optionDiv.onclick = () => selectOption(optionIndex, optionDiv);
+        optionsContainer.appendChild(optionDiv);
+      });
 
-      if (rms > THRESHOLD) {
-        blowSound.play();
-        scaleFactor = Math.min(MAX_SCALE, scaleFactor + INCREMENT);
-        balloon.style.transform = `scale(${scaleFactor})`;
+      // Reset UI
+      document.getElementById('submitBtn').disabled = true;
+      document.getElementById('feedback').classList.remove('show');
+      document.getElementById('nextBtn').style.display = 'none';
+      document.getElementById('retryBtn').style.display = 'none';
+      selectedAnswer = null;
+    }
 
-        if (scaleFactor >= MAX_SCALE) {
-          balloon.style.display = 'none';
-          blowSound.pause();
-          popSound.play();
-          createConfetti();
-          msgBox.style.display = 'block';
-          setTimeout(() => msgBox.style.opacity = '1', 10);
-          running = false;
-          micStream.getTracks().forEach(t => t.stop());
+    function selectOption(optionIndex, optionElement) {
+      // Remove previous selections
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      // Select current option
+      optionElement.classList.add('selected');
+      selectedAnswer = optionIndex;
+      
+      // Enable submit button
+      document.getElementById('submitBtn').disabled = false;
+    }
+
+    function submitAnswer() {
+      if (selectedAnswer === null) return;
+
+      const question = questions[currentQuestionIndex];
+      const isCorrect = selectedAnswer === question.correct;
+      const feedback = document.getElementById('feedback');
+      
+      if (isCorrect) {
+        feedback.classList.add('correct');
+        feedback.classList.remove('incorrect');
+        document.getElementById('feedbackEmoji').textContent = '🎉';
+        document.getElementById('feedbackText').innerHTML = question.correctFeedback;
+        
+        // Show next button for correct answers
+        document.getElementById('nextBtn').style.display = 'inline-block';
+        document.getElementById('retryBtn').style.display = 'none';
+        
+        // Handle last question
+        if (currentQuestionIndex === totalQuestions - 1) {
+          document.getElementById('nextBtn').textContent = 'Get Your Certificate! 🏆';
+          document.getElementById('nextBtn').onclick = showCertificate;
         }
+        
       } else {
-        blowSound.pause();
-        blowSound.currentTime = 0;
+        feedback.classList.add('incorrect');
+        feedback.classList.remove('correct');
+        document.getElementById('feedbackEmoji').textContent = '😅';
+        document.getElementById('feedbackText').innerHTML = question.wrongFeedback;
+        
+        // Show retry button for wrong answers
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('retryBtn').style.display = 'inline-block';
       }
 
-      requestAnimationFrame(() => processAudio(analyser));
+      // Show feedback
+      setTimeout(() => {
+        feedback.classList.add('show');
+      }, 300);
+
+      // Disable submit button and options
+      document.getElementById('submitBtn').disabled = true;
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.style.pointerEvents = 'none';
+      });
     }
 
-    function createConfetti() {
-      for (let i = 0; i < 100; i++) {
-        const piece = document.createElement('div');
-        piece.className = 'confetti-piece';
-        piece.style.left = `${Math.random() * 100}vw`;
-        piece.style.backgroundColor = `hsl(${Math.random() * 360},100%,50%)`;
-        piece.style.animationDuration = `${Math.random() * 3 + 2}s`;
-        confetti.appendChild(piece);
+    function retryQuestion() {
+      // Reset the current question
+      document.getElementById('feedback').classList.remove('show');
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.style.pointerEvents = 'auto';
+        opt.classList.remove('selected');
+      });
+      selectedAnswer = null;
+      document.getElementById('submitBtn').disabled = true;
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      
+      if (currentQuestionIndex < totalQuestions) {
+        showQuestion(currentQuestionIndex);
       }
     }
 
-    // start confetti right away
-    createConfetti();
+    function showCertificate() {
+      document.getElementById('questionCard').style.display = 'none';
+      
+      // Set completion date
+      const today = new Date();
+      const dateString = today.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      document.getElementById('completionDate').textContent = dateString;
+      
+      // Show certificate
+      const certificateContainer = document.getElementById('certificateContainer');
+      certificateContainer.style.display = 'block';
+      
+      // Add celebration effects
+      createCelebrationEffects();
+      
+      // Optional: Ask for user's name
+      setTimeout(() => {
+        const userName = prompt("Enter your name for the certificate (or leave blank for 'Future Nurse'):");
+        if (userName && userName.trim() !== '') {
+          document.getElementById('recipientName').textContent = userName.trim().toUpperCase();
+        }
+      }, 1000);
+    }
+
+    function createCelebrationEffects() {
+      const celebrationEmojis = ['🎉', '🎊', '🏆', '⭐', '💫', '🌟', '👩‍⚕️', '👨‍⚕️', '💜', '🩺'];
+      const body = document.body;
+      
+      // Create floating celebration emojis
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+          const emoji = document.createElement('div');
+          emoji.textContent = celebrationEmojis[Math.floor(Math.random() * celebrationEmojis.length)];
+          emoji.style.position = 'fixed';
+          emoji.style.left = Math.random() * window.innerWidth + 'px';
+          emoji.style.top = '-50px';
+          emoji.style.fontSize = '2rem';
+          emoji.style.pointerEvents = 'none';
+          emoji.style.zIndex = '1000';
+          emoji.style.animation = 'celebration-fall 3s ease-out forwards';
+          
+          const style = document.createElement('style');
+          style.textContent = `
+            @keyframes celebration-fall {
+              0% { 
+                opacity: 1; 
+                transform: translateY(-50px) rotate(0deg) scale(1); 
+              }
+              50% { 
+                opacity: 1; 
+                transform: translateY(${window.innerHeight/2}px) rotate(180deg) scale(1.2); 
+              }
+              100% { 
+                opacity: 0; 
+                transform: translateY(${window.innerHeight + 100}px) rotate(360deg) scale(0.5); 
+              }
+            }
+          `;
+          document.head.appendChild(style);
+          
+          body.appendChild(emoji);
+          
+          setTimeout(() => {
+            emoji.remove();
+            style.remove();
+          }, 3000);
+        }, i * 200);
+      }
+    }
+
+    // Initialize the quiz when page loads
+    document.addEventListener('DOMContentLoaded', initQuiz);
   </script>
 </body>
 </html>
