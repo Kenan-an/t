@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🩺 Medical Quiz Challenge - Are You Ready, Doc?</title>
+  <title>🩺 Medical Quiz Challenge - Are You Ready, Nurse?</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -32,6 +32,114 @@
       color: var(--text-dark);
       position: relative;
       overflow-x: hidden;
+    }
+
+    /* Welcome popup overlay */
+    .welcome-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      backdrop-filter: blur(10px);
+    }
+
+    .welcome-popup {
+      background: white;
+      border-radius: 2rem;
+      padding: 3rem;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 30px 60px rgba(217, 70, 239, 0.3);
+      border: 3px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+      animation: popupAppear 0.5s ease-out;
+    }
+
+    @keyframes popupAppear {
+      0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .welcome-popup::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+    }
+
+    .welcome-title {
+      font-size: 2.2rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .welcome-message {
+      font-size: 1.3rem;
+      color: var(--text-dark);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .welcome-emoji {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .continue-btn {
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: white;
+      border: none;
+      padding: 1.2rem 2.5rem;
+      border-radius: 2rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .continue-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .continue-btn:hover::before {
+      left: 100%;
+    }
+
+    .continue-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(236, 72, 153, 0.4);
     }
 
     /* Floating hearts animation */
@@ -449,10 +557,38 @@
         flex-direction: column;
         gap: 1rem;
       }
+
+      .welcome-popup {
+        margin: 20px;
+        padding: 2rem;
+      }
+
+      .welcome-title {
+        font-size: 1.8rem;
+      }
+
+      .welcome-message {
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Welcome Popup -->
+  <div class="welcome-overlay" id="welcomeOverlay">
+    <div class="welcome-popup">
+      <span class="welcome-emoji">🎉</span>
+      <div class="welcome-title">ياعيني وصلتي لهنا</div>
+      <div class="welcome-message">
+        هديتك هيا حمام مغربي او اي عناية جسم ثانية من اختيارك<br>
+        بس قبلها!! لازم نتأكد هل فعلا انتي ممرضة؟
+      </div>
+      <button class="continue-btn" onclick="closeWelcomePopup()">
+        ابدأ الاختبار
+      </button>
+    </div>
+  </div>
+
   <div class="floating-hearts">
     <div class="heart" style="left: 10%; animation-delay: 0s;">💜</div>
     <div class="heart" style="left: 20%; animation-delay: 1s;">🩺</div>
@@ -467,8 +603,8 @@
 
   <div class="container">
     <div class="header">
-      <h1>اختبار لتحديد اذا نعطيك شهادة التخرج</h1>
-      <p>جاوبي كل الاسئلة عشان تاخذي الشهادة!</p>
+      <h1>اخر خطوة قبل الشهادة… قدها؟</h1>
+      <p>قبل لا نطبع الشهادة، جاوبي اول</p>
     </div>
 
     <div class="quiz-card" id="questionCard">
@@ -497,7 +633,7 @@
       
       <div class="certificate-header">
         <div class="certificate-title">🎓 CERTIFICATE OF GRADUATION 🎓</div>
-        <div class="certificate-subtitle">NURSING EXCELLENCE PROGRAM</div>
+        <div class="certificate-subtitle">NURSING GRADUATION PROGRAM</div>
       </div>
 
       <div class="certificate-body">
@@ -507,7 +643,7 @@
           This is to certify that
         </div>
         
-        <div class="certificate-recipient" id="recipientName">FUTURE NURSE</div>
+        <div class="certificate-recipient" id="recipientName">TALYA</div>
         
         <div class="certificate-text">
           has successfully completed the Nursing Bachelor<br><br>
@@ -580,7 +716,7 @@
           "D. 70/40 mmHg"
         ],
         correct: 2,
-        correctFeedback: "باقي شويا على الشهادة!!",
+        correctFeedback: "!!باقي شويا على الشهادة",
         wrongFeedback: "معقوله؟ فكري مره ثانية"
       },
       {
@@ -593,7 +729,7 @@
           "D. Stethoscope"
         ],
         correct: 3,
-        correctFeedback: "الله عليك",
+        correctFeedback: "من متى عندك المعلومات ذي كلها؟",
         wrongFeedback: "معقوله؟ فكري مره ثانية"
       }
     ];
@@ -601,6 +737,17 @@
     let currentQuestionIndex = 0;
     let selectedAnswer = null;
     let totalQuestions = questions.length;
+
+    function closeWelcomePopup() {
+      const overlay = document.getElementById('welcomeOverlay');
+      overlay.style.opacity = '0';
+      overlay.style.transform = 'scale(0.9)';
+      
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        initQuiz();
+      }, 300);
+    }
 
     function initQuiz() {
       showQuestion(currentQuestionIndex);
@@ -664,7 +811,7 @@
         
         // Handle last question
         if (currentQuestionIndex === totalQuestions - 1) {
-          document.getElementById('nextBtn').textContent = 'Get Your Certificate! 🏆';
+          document.getElementById('nextBtn').textContent = '🏆اطبع الشهادة';
           document.getElementById('nextBtn').onclick = showCertificate;
         }
         
@@ -722,23 +869,15 @@
       });
       document.getElementById('completionDate').textContent = dateString;
       
-      // Show certificate
+      // Show certificate with fixed name "TALYA"
       const certificateContainer = document.getElementById('certificateContainer');
       certificateContainer.style.display = 'block';
       
       // Add celebration effects
       createCelebrationEffects();
-      
-      // Optional: Ask for user's name
-      setTimeout(() => {
-        const userName = prompt("Enter your name for the certificate (or leave blank for 'Future Nurse'):");
-        if (userName && userName.trim() !== '') {
-          document.getElementById('recipientName').textContent = userName.trim().toUpperCase();
-        }
-      }, 1000);
     }
 
-    function createCelebrationEffects() {
+ function createCelebrationEffects() {
       const celebrationEmojis = ['🎉', '🎊', '🏆', '⭐', '💫', '🌟', '👩‍⚕️', '👨‍⚕️', '💜', '🩺'];
       const body = document.body;
       
@@ -751,41 +890,37 @@
           emoji.style.left = Math.random() * window.innerWidth + 'px';
           emoji.style.top = '-50px';
           emoji.style.fontSize = '2rem';
+          emoji.style.zIndex = '9999';
           emoji.style.pointerEvents = 'none';
-          emoji.style.zIndex = '1000';
-          emoji.style.animation = 'celebration-fall 3s ease-out forwards';
-          
-          const style = document.createElement('style');
-          style.textContent = `
-            @keyframes celebration-fall {
-              0% { 
-                opacity: 1; 
-                transform: translateY(-50px) rotate(0deg) scale(1); 
-              }
-              50% { 
-                opacity: 1; 
-                transform: translateY(${window.innerHeight/2}px) rotate(180deg) scale(1.2); 
-              }
-              100% { 
-                opacity: 0; 
-                transform: translateY(${window.innerHeight + 100}px) rotate(360deg) scale(0.5); 
-              }
-            }
-          `;
-          document.head.appendChild(style);
+          emoji.style.animation = 'fallDown 3s ease-in forwards';
           
           body.appendChild(emoji);
           
+          // Remove emoji after animation
           setTimeout(() => {
-            emoji.remove();
-            style.remove();
+            if (emoji.parentNode) {
+              emoji.parentNode.removeChild(emoji);
+            }
           }, 3000);
         }, i * 200);
       }
     }
 
-    // Initialize the quiz when page loads
-    document.addEventListener('DOMContentLoaded', initQuiz);
+    // Add CSS for falling animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fallDown {
+        0% {
+          transform: translateY(-50px) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(${window.innerHeight + 100}px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
